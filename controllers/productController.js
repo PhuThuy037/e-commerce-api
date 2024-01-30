@@ -27,7 +27,9 @@ const getAllProducts = async (req, res) => {
   res.status(StatusCodes.OK).json({ product }).sorr("createdAt");
 };
 const getSingleProduct = async (req, res) => {
-  const product = await Product.find({ _id: req.params.id });
+  const product = await Product.find({ _id: req.params.id }).populate(
+    "reviews"
+  );
   if (!product) {
     throw new CustomError.UnauthoziError("Cant find product");
   }
@@ -45,8 +47,12 @@ const updateProduct = async (req, res) => {
   res.status(StatusCodes.OK).json({ product });
 };
 const deleteProduct = async (req, res) => {
-  const product = await Product.findOneAndRemove({ _id: req.params.id });
-  res.status(StatusCodes.OK).json({ product });
+  const product = await Product.findOne({ _id: req.params.id });
+  if (!product) {
+    throw new CustomError.NotFoundError("Cant find product");
+  }
+  product.remove();
+  res.status(StatusCodes.OK).json({ msg: "Success" });
 };
 const uploadImage = async (req, res) => {
   if (!req.files) {

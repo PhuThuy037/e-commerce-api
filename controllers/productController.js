@@ -23,8 +23,7 @@ const createProduct = async (req, res) => {
 };
 const getAllProducts = async (req, res) => {
   const product = await Product.find({});
-
-  res.status(StatusCodes.OK).json({ product }).sorr("createdAt");
+  res.status(StatusCodes.OK).json({ product });
 };
 const getSingleProduct = async (req, res) => {
   const product = await Product.find({ _id: req.params.id }).populate(
